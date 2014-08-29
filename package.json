@@ -1,0 +1,27 @@
+{
+  "name": "regicide",
+  "version": "0.0.0",
+  "description": "Gif combinder for National Voter Registration Day",
+  "main": "gruntfile.js",
+  "dependencies": {
+    "glob": "~4.0.5",
+    "grunt": "~0.4.5",
+    "rimraf": "~2.2.8",
+    "grunt-ci": "~0.1.0",
+    "grunt-http-server": "~0.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mojowen/regicide.git"
+  },
+  "author": "mojowen",
+  "license": "Apache Version 2.0",
+  "bugs": {
+    "url": "https://github.com/mojowen/regicide/issues"
+  },
+  "homepage": "https://github.com/mojowen/regicide"
+}

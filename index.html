@@ -1,0 +1,40 @@
+<html>
+    <head>
+    <style type="text/css">
+        #viewport { width: 500px; height: 500px; }
+    </style>
+    </head>
+    <body onLoad="go()">
+        <img id="img" src="output.png">
+        <canvas id="viewport"></canvas>
+        <script type="text/javascript">
+            var canvas = document.getElementById('viewport'),
+            context = canvas.getContext('2d');
+            base_image = new Image();
+            base_image.src = img.src;
+
+            var sourceX = 150;
+            var sourceY = 0;
+            var sourceWidth = 150;
+            var sourceHeight = 150;
+            var destWidth = sourceWidth;
+            var destHeight = sourceHeight;
+            var destX = canvas.width / 2 - destWidth / 2;
+            var destY = canvas.height / 2 - destHeight / 2;
+
+            // context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+
+            go = function() {
+            }
+        </script>
+    </body>
+</html>
+<!--
+
+x STEP 0: Write gif creation script
+STEP 1: Create gif class
+STEP 2: HTML 5 file drop
+
+
+
+ -->
