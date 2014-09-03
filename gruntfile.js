@@ -95,7 +95,7 @@ module.exports = function(grunt) {
 
         var gif = new Gif(file, gif_cache, finished_gifs, done)
 
-        grunt.log.ok('Processed '+gif.name())
+        grunt.log.ok('Processing '+gif.name())
 
     });
 
