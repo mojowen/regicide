@@ -5,7 +5,7 @@ var path = require('path')
 var glob = require('glob')
 var rimraf = require('rimraf')
 
-var Gif = require('lib/gif')
+var Gif = require('lib/ProcessGif')
 
 module.exports = function(grunt) {
 
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         gif_lib: 'gifs/',
         gif_cache: 'cache/',
-        gif_list: 'list.json',
+        gif_list: 'list.js',
         'http-server': {
             'dev': {
 
@@ -34,6 +34,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['clense', 'process','list'])
+    grunt.registerTask('serve', ['default', 'http-server'])
 
     grunt.registerTask('process', 'Process ALL the gifs', function() {
         var done = this.async()
@@ -75,7 +76,7 @@ module.exports = function(grunt) {
             var list = grunt.option('finished_gifs')
             var gif_list = grunt.config.get('gif_list')
 
-            fs.writeFile(gif_list, JSON.stringify(list), function(err) {
+            fs.writeFile(gif_list, "load_gifs("+JSON.stringify(list)+")", function(err) {
                 grunt.log.ok('Writing '+grunt.config.get('gif_list'))
                 done(true)
             })
