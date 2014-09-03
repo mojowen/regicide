@@ -2,11 +2,18 @@
     <head>
     </head>
     <body onLoad="go()">
-        <canvas width="500" height="500" id="viewport"></canvas>
+        <canvas width="500" height="500" id="viewport" ondrop="upload(event)" ondragover="allowDrop(event)"></canvas>
         <script type="text/javascript">
+            var base = null
+            var go = function() { }
+            var upload = function (event) {
+                event.preventDefault()
+                event.stopPropagation()
 
-            go = function() {
+                base = new Image
+                base.src = URL.createObjectURL(event.dataTransfer.files[0])
             }
+            function allowDrop(event) { event.preventDefault() }
         </script>
         <script type="text/javascript" src="lib/Gif.js"></script>
         <script type="text/javascript" src="list.js"></script>
@@ -14,10 +21,16 @@
 </html>
 <!--
 
-x STEP 0: Write gif creation script
-x STEP 1: Create gif class that auto animates
-STEP 2: HTML 5 file drop
+x STEP 0.0: Write gif creation script
+x STEP 0.1: Create gif class that auto animates
+x STEP 0.2: HTML 5 file drop
+STEP 0.3: Create a GIF to download
+STEP 0.4: Make it look ok - instructions, no gif till upload
+STEP 0.5: Find better gifs / placement of gifs
+STEP 0.6: Send demo to matt
 
+STEP 1.0: Works server side too
+STEP 1.1: Can work from phone
 
 
  -->
