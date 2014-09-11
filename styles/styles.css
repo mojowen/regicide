@@ -1,0 +1,77 @@
+body {
+    font-family: Helvetica, sans-serif;
+    background: transparent url(flag.jpg) top left;
+    background-size: cover;
+}
+#main {
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    text-align: center;
+}
+#create, #content {
+    background: rgba(255,255,255,0.7);
+    border: 4px dashed #333;
+}
+#content {
+    min-height: 500px;
+    min-width: 500px;
+    position: absolute;
+    top: 5em;
+    left: 0;
+    right: 0;
+    bottom: 3em;
+}
+#content.dragging { border-color: #aaa;}
+#content h3 {
+    margin-top: 10em;
+}
+#create {
+    width: 400px;
+    display: block;
+    margin: 1em auto 0;
+    padding: 10px;
+}
+
+.uploaded #content {
+    border: none;
+    background: transparent;
+}
+.uploaded #content h1,
+.uploaded #content h3,
+.uploaded #content form,
+#viewport {
+    display: none;
+}
+#viewport {
+    margin: 0 auto;
+}
+#create {
+    display: none;
+}
+.uploaded #create,
+.uploaded #viewport,
+.uploaded #create .progress {
+    display: block;
+}
+#create .progress,
+#create.building button {
+    display: none;
+}
+#create .finished,
+#finished{
+    display: none;
+}
+.done #create .progress {
+    display: none;
+}
+.done #finished,
+.done #create.building .finished {
+    display: block;
+}
+
+* {
+    box-sizing: border-box;
+}

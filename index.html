@@ -1,22 +1,81 @@
 <html>
     <head>
+        <link rel="stylesheet" href="/styles/styles.css">
     </head>
-    <body onLoad="go()">
-        <canvas width="500" height="500" id="viewport" ondrop="upload(event)" ondragover="allowDrop(event)"></canvas>
+    <body
+        onLoad="go()"
+        ondrop="upload(event)"
+        ondragover="allowDrop(event)">
+        <div id="main">
+            <div id="create">
+                <div class="progress">
+                    <span>Creating gif...</span>
+                </div>
+                <div class="finished">
+                    <a class="download-url" href="" download="my-votin-gif.gif">
+                        Done! Click to download
+                    </a>
+                </div>
+            </div>
+            <div id="content"
+                ondragover="addClass(event)"
+                ondragleave="removeClass(event)">
+                <h1>Create a Gif!</h1>
+                <h3>Drag or upload an image</h3>
+                <canvas id="viewport"></canvas>
+                <form id="shim">
+                    <input type="file" onchange="upload(event)">
+                </form>
+                <div id="finished">
+                    <a class="download-url" href="" download="my-votin-gif.gif">
+                        <img id="the_gif" src="">
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <script type="text/javascript">
-            var base = null
-            var go = function() { }
-            var upload = function (event) {
+            function go() {
+                var size = (content.offsetHeight > content.offsetWidth ?
+                            content.offsetWidth : content.offsetHeight)
+                viewport.height = size
+                viewport.width = size
+            }
+            function upload(event) {
+
                 event.preventDefault()
                 event.stopPropagation()
 
-                base = new Image
-                base.src = URL.createObjectURL(event.dataTransfer.files[0])
+                Gifs.base_image = new Image
+                if( typeof event.dataTransfer !== 'undefined' ) {
+                    Gifs.base_image.src = URL.createObjectURL(event.dataTransfer.files[0])
+                } else  {
+                    Gifs.base_image.src = URL.createObjectURL(event.target.files[0])
+                }
+                Gifs.base_image.onload = function() {
+                    main.className = 'uploaded'
+                    Gifs.start_drawing()
+                    create.className = "building"
+                    Gifs.capture()
+                }
             }
-            function allowDrop(event) { event.preventDefault() }
+            function allowDrop(event) {
+                event.preventDefault();
+            }
+            function addClass(event) {
+                content.className = 'dragging'
+            }
+            function removeClass(event) {
+                content.className = ''
+            }
+            function capture_gifs(event) {
+                event.target.parentElement.className = "building"
+                Gifs.capture()
+            }
         </script>
-        <script type="text/javascript" src="lib/Gif.js"></script>
+        <script type="text/javascript" src="lib/gif.js"></script>
         <script type="text/javascript" src="list.js"></script>
+        <script type="text/javascript" src="lib/gif_maker.js"></script>
     </body>
 </html>
 <!--
@@ -24,10 +83,11 @@
 x STEP 0.0: Write gif creation script
 x STEP 0.1: Create gif class that auto animates
 x STEP 0.2: HTML 5 file drop
-STEP 0.3: Create a GIF to download
-STEP 0.4: Make it look ok - instructions, no gif till upload
-STEP 0.5: Find better gifs / placement of gifs
-STEP 0.6: Send demo to matt
+x STEP 0.3: Create a GIF to download
+
+X STEP 0.4: Make it look ok - instructions, no gif till upload
+X STEP 0.5: Find better gifs / placement of gifs
+X STEP 0.6: Send demo to matt
 
 STEP 1.0: Works server side too
 STEP 1.1: Can work from phone
