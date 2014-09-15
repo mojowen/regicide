@@ -5,7 +5,7 @@ var path = require('path')
 var glob = require('glob')
 var rimraf = require('rimraf')
 
-var Gif = require('lib/ProcessGif')
+var ProcessGif = require('lib/ProcessGif')
 
 module.exports = function(grunt) {
 
@@ -32,9 +32,10 @@ module.exports = function(grunt) {
 
     });
 
-    // Default task(s).
     grunt.registerTask('default', ['clense', 'process','list'])
-    grunt.registerTask('serve', ['default', 'http-server'])
+    grunt.registerTask('serve', ['default','http-server'])
+
+    grunt.loadNpmTasks('grunt-http-server');
 
     grunt.registerTask('process', 'Process ALL the gifs', function() {
         var done = this.async()
@@ -76,10 +77,13 @@ module.exports = function(grunt) {
             var list = grunt.option('finished_gifs')
             var gif_list = grunt.config.get('gif_list')
 
-            fs.writeFile(gif_list, "load_gifs("+JSON.stringify(list)+")", function(err) {
-                grunt.log.ok('Writing '+grunt.config.get('gif_list'))
-                done(true)
-            })
+            fs.writeFile(gif_list,
+                "load_gifs("+JSON.stringify(list)+")",
+                function(err) {
+                    grunt.log.ok('Writing '+grunt.config.get('gif_list'))
+                    done(true)
+                }
+            )
         }
     )
     grunt.registerTask('process_gif', 'Process a specific gif', function() {
@@ -93,11 +97,21 @@ module.exports = function(grunt) {
         }
         var finished_gifs = grunt.option('finished_gifs')
 
-        var gif = new Gif(file, gif_cache, finished_gifs, done)
+        var gif = new ProcessGif(file, gif_cache, finished_gifs, done)
 
         grunt.log.ok('Processing '+gif.name())
 
     });
 
-    grunt.loadNpmTasks('grunt-http-server');
+
+    grunt.registerTask('create','Create gif from a static file', function() {
+        var base_image = '../civet_cat-10563.jpg' //this.args[0]
+        var done = this.async()
+        grunt.log.ok('Transforming '+base_image.split('/').reverse()[0])
+        gifs = null
+        load_gifs = require('lib/CreateGif').Load
+        var create = require('lib/CreateGif').Create
+        create(base_image, done)
+    })
+
 };

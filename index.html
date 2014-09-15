@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-
+        <script type="text/javascript" src="lib/gif.js"></script>
         <script type="text/javascript">
             function go() {
                 var size = (content.offsetHeight > content.offsetWidth ?
@@ -72,8 +72,73 @@
                 event.target.parentElement.className = "building"
                 Gifs.capture()
             }
+            function load_gifs(gifs) {
+                var Gifs = null
+                var canvas = document.getElementById('viewport')
+                var context = canvas.getContext('2d')
+
+                var gifs_config = {
+                    gif_init: function() {
+
+                        var img = new Image()
+                        img.src = this.sprite_path
+                        img.style.width = '0px'
+                        img.style.height = '0px'
+
+                        var self = this
+                        img.onload = function() { self.ready = true }
+
+                        document.body.appendChild(img)
+
+                        return this
+                    },
+                    gifs_capture: function() {
+                        this.gif = new GIF({
+                            workers: 1,
+                            quality: 2
+                        });
+                        this.gif.setOptions({
+                            workerScript: './lib/gif_maker.worker.js'
+                        })
+
+                        this.frame = 0
+
+                        var self = this
+                        this.gif.on('finished', function(blob) {
+                            self.save_gif(URL.createObjectURL(blob))
+                        })
+                        this.gif.on('progress', function(progress) {
+                            // should be a callback
+                        })
+                    },
+                    gifs_draw: function() {
+                        if( this.frame < this.frames ) {
+                            this.gif.addFrame(context.canvas, {delay: this.speed});
+                            this.frame += 1
+                        } else {
+                            this.frame = 0
+                            var gif = this.gif
+                            this.gif = null
+                            gif.render()
+                        }
+                    },
+                    gifs_save: function(url) {
+                        main.className = 'uploaded done'
+                        viewport.style.display = 'none'
+                        download_links = main.querySelectorAll('.download-url')
+                        for (var i = download_links.length - 1; i >= 0; i--) {
+                            download_links[i].setAttribute('href',url)
+                        };
+                        the_gif.src = url
+                    },
+                    context: context
+                }
+
+                Gifs = new GifManager(gifs, gifs_config)
+                window.Gifs = Gifs
+            }
+
         </script>
-        <script type="text/javascript" src="lib/gif.js"></script>
         <script type="text/javascript" src="list.js"></script>
         <script type="text/javascript" src="lib/gif_maker.js"></script>
     </body>
@@ -89,8 +154,15 @@ X STEP 0.4: Make it look ok - instructions, no gif till upload
 X STEP 0.5: Find better gifs / placement of gifs
 X STEP 0.6: Send demo to matt
 
-STEP 1.0: Works server side too
-STEP 1.1: Can work from phone
+STEP 0.7: Can do it from a URL, drag from chrome, paste a URL or image and it works
+http://www.dropzonejs.com/
+http://jsfiddle.net/KJW4E/2/
+
+STEP 0.8: Create a template with set positions, etc
+STEP 0.9: Can work from phone
+
+x STEP 1.0: Works server side too
+STEP 1.1: Could store gifs and make them sharable
 
 
  -->
