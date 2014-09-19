@@ -105,7 +105,7 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask('create','Create gif from a static file', function() {
-        var base_image = '../civet_cat-10563.jpg' //this.args[0]
+        var base_image = this.args[0] || grunt.option('static')
         var done = this.async()
         grunt.log.ok('Transforming '+base_image.split('/').reverse()[0])
         gifs = null
