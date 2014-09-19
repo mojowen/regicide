@@ -3,7 +3,6 @@
         <link rel="stylesheet" href="/styles/styles.css">
     </head>
     <body
-        onLoad="go()"
         ondrop="upload(event)"
         ondragover="allowDrop(event)">
         <div id="main">
@@ -35,12 +34,6 @@
         </div>
         <script type="text/javascript" src="lib/gif.js"></script>
         <script type="text/javascript">
-            function go() {
-                var size = (content.offsetHeight > content.offsetWidth ?
-                            content.offsetWidth : content.offsetHeight)
-                viewport.height = size
-                viewport.width = size
-            }
             function upload(event) {
 
                 event.preventDefault()
@@ -133,9 +126,16 @@
                     },
                     context: context
                 }
+                var size = (content.offsetHeight > content.offsetWidth ?
+                            content.offsetWidth : content.offsetHeight)
+                viewport.height = size
+                viewport.width = size
 
                 Gifs = new GifManager(gifs, gifs_config)
                 window.Gifs = Gifs
+                    main.className = 'uploaded'
+                    Gifs.start_drawing()
+
             }
 
         </script>

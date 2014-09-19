@@ -15,6 +15,7 @@ module.exports = function(grunt) {
         gif_lib: 'gifs/',
         gif_cache: 'cache/',
         gif_list: 'list.js',
+        gif_special: ['squirrel'],
         'http-server': {
             'dev': {
 
@@ -89,6 +90,7 @@ module.exports = function(grunt) {
     grunt.registerTask('process_gif', 'Process a specific gif', function() {
         var done = this.async()
         var gif_cache = grunt.config.get('gif_cache')
+        var special = grunt.config.get('gif_special')
 
         var file = grunt.option('gif')
 
@@ -97,7 +99,15 @@ module.exports = function(grunt) {
         }
         var finished_gifs = grunt.option('finished_gifs')
 
-        var gif = new ProcessGif(file, gif_cache, finished_gifs, done)
+        var gif = new ProcessGif(file, gif_cache, function() {
+            this.config.special = special.indexOf(this.name()) !== -1
+            if( this.config.special ) grunt.log.ok(['And',
+                                                    this.name(),
+                                                    'is special'].join(' '))
+            if( typeof finished_gifs !== 'undefined' )
+                finished_gifs.push(this.config);
+            done(true)
+        })
 
         grunt.log.ok('Processing '+gif.name())
 
