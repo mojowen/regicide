@@ -20,4 +20,6 @@ t.on('error', function (err) {
   console.log('Oh no')
 })
 
-t.track('nodejs')
+t.track('#celebratenvrd')
+t.track('#govote')
+t.track('#imregistered')
