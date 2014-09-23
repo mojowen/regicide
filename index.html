@@ -33,6 +33,7 @@
             </div>
         </div>
         <script type="text/javascript" src="lib/gif.js"></script>
+        <script type="text/javascript" src="lib/prepare_canvas.js"></script>
         <script type="text/javascript">
             function upload(event) {
 
@@ -131,7 +132,7 @@
                 viewport.height = size
                 viewport.width = size
 
-                Gifs = new GifManager(gifs, gifs_config)
+                Gifs = new GifManager(prep_gifs(gifs, size), gifs_config)
                 window.Gifs = Gifs
             }
 
