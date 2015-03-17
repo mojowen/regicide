@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style="background: transparent url('styles/flag.jpg') top left repeat;">
+
+<div id="gif_list" style="float: left;"></div>
+<canvas id="viewport" style="float: left;"></canvas>
+
+<script type="text/javascript" src="lib/gif.js"></script>
+
+<script type="text/javascript">
+	function load_gifs(gifs) {
+        var canvas = document.getElementById('viewport')
+        var context = canvas.getContext('2d')
+		var padding = 10
+
+		var gifs_config = {
+			gif_init: function() {
+
+				var img = new Image()
+				img.src = this.sprite_path
+				img.style.width = '0px'
+				img.style.height = '0px'
+
+				var self = this
+				img.onload = function() {
+					self.ready = true
+				}
+
+				document.body.appendChild(img)
+
+				return this
+			},
+			context: context
+		}
+        viewport.height = gifs.reduce( function(prev, el) {
+        	var top = prev + padding
+        	var height = el.height > 100 ? el.height : 100
+        	el.position = { y: top, x: 0 }
+
+			var div = document.createElement('div')
+			div.style.display = 'block'
+			div.style.height = height+'px'
+			div.style.margin = padding+'px 30px'
+			div.style.boxSizing = 'border-box'
+			div.style.padding = '30px'
+			div.style.background = 'white'
+
+			var heading = document.createElement('h2')
+			heading.textContent = el.sprite_path.split('/')[1].replace(/\_/g,' ')
+			heading.style.padding = '0'
+			heading.style.margin = '0'
+			div.appendChild(heading)
+
+			var info = document.createElement('textarea')
+			info.style.width = "200px"
+			info.textContent = JSON.stringify( el )
+			div.appendChild(info)
+
+			gif_list.appendChild(div)
+
+        	return top + height;
+        }, 0)
+        viewport.width = gifs.reduce( function(prev, el) {
+        	if( el.width > prev) return el.width;
+        	else return prev;
+        },0)
+
+        Gifs = new GifManager(gifs, gifs_config)
+        Gifs.start_drawing()
+	}
+</script>
+<script type="text/javascript" src="list.js"></script>
+
+</body>
+</html>

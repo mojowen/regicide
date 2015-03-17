@@ -4,6 +4,7 @@ var path = require('path')
 
 var glob = require('glob')
 var rimraf = require('rimraf')
+var s3 = require('s3')
 
 var ProcessGif = require('lib/ProcessGif')
 
@@ -35,6 +36,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clense', 'process','list'])
     grunt.registerTask('serve', ['default','http-server'])
+    grunt.registerTask('deploy', ['default','deploy_lib','deploy_styles','deploy_list', 'deploy_cache'])
 
     grunt.loadNpmTasks('grunt-http-server');
 
@@ -124,4 +126,81 @@ module.exports = function(grunt) {
         create(base_image, done)
     })
 
+    grunt.registerTask('deploy_lib','Put all of the lib onto S3', function() {
+        var done = this.async()
+        upload_folder('lib', done)
+    })
+    grunt.registerTask('deploy_styles','Put all of the lib onto S3', function() {
+        var done = this.async()
+        upload_folder('styles', done)
+    })
+    grunt.registerTask('deploy_cache','Put all of the cache onto S3', function() {
+        var done = this.async()
+        upload_folder('cache', done)
+    })
+    grunt.registerTask('deploy_list','Put all the list on to S3', function() {
+        upload_file(grunt.config.get('gif_list'), this.async())
+    })
+    grunt.registerTask('deploy_index','Put the index on to S3', function() {
+        upload_file('index.html', this.async())
+    })
+    function upload_file(file, done) {
+        var client = s3.createClient({
+            s3Options: {
+                accessKeyId: process.env.S3,
+                secretAccessKey: process.env.S3_SECRET,
+                region: 'us-west-2'
+            }
+        })
+
+        var params = {
+          localFile: file,
+          deleteRemoved: true,
+          s3Params: {
+            Bucket: "nvrd",
+            Key: file,
+          }
+        }
+
+        var uploader = client.uploadFile(params)
+
+        uploader.on('error', function(err) {
+            console.error("unable to sync:", err.stack);
+            done(false)
+        });
+        uploader.on('end', function() {
+            grunt.log.ok('Saved list.js to amazon')
+            done(true)
+        });
+    }
+    function upload_folder(path, done) {
+        var client = s3.createClient({
+            s3Options: {
+                accessKeyId: process.env.S3,
+                secretAccessKey: process.env.S3_SECRET,
+                region: 'us-west-2'
+            }
+        })
+
+        var params = {
+          localDir: path,
+          deleteRemoved: true,
+          s3Params: {
+            Bucket: "nvrd",
+            Prefix: path,
+          }
+        }
+
+        var uploader = client.uploadDir(params)
+
+        uploader.on('error', function(err) {
+            console.error("unable to sync:", err.stack);
+            done(false)
+        });
+        uploader.on('end', function() {
+            grunt.log.ok('Saved '+path+' to amazon')
+            done(true)
+        });
+    }
 };
+
